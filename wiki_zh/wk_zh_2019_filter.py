@@ -4,7 +4,8 @@ import re
 
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”', '(', ')', '〈', '〉', '-', '–', '{', '}', '"', '·', '|',
-               ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '˭', '※']
+               ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '˭', '※', '〔 ', '【',
+               '】', '+', '™', '®']
 replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', 'km²': "平方米", "km": "千米"}
 number = '0123456789'
 
@@ -164,7 +165,7 @@ def process_corpus(dir_path: str, corpus: str):
     for dir_name in os.listdir(path):
         if not dir_name.startswith("."):
             count += process_dir(path, dir_name, corpus, en_dict)
-            break
+            # break
     print(f"{corpus} finish,count={count} >>>>>>>>>>>>>>")
 
 

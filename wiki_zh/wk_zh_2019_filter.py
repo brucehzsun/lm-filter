@@ -6,21 +6,33 @@ zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”', '(', ')', '〈', '〉', '-', '–', '{', '}', '"', '·', '|',
                ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '˭']
 replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' '}
+number = '0123456789'
+
+def is_chinese_char(ch: chr):
+    return ('\u4e00' <= ch <= '\u9FFF') or ('\uAC00' <= ch <= '\uD7AF') or ('\u3040' <= ch <= '\u31FF')  # 中文 韩文 日文
 
 
 def to_lm_str(text: str):
-    english = 'abcdefghijklmnopqrstuvwxyz0123456789'
     output = ['<s>']
     buffer = ''
+    pre_char: chr = None
     for s in text:
-        if s in english or s in english.upper():  # 英文或数字
-            buffer += s
-        else:  # 中文
-            if buffer.strip():
+        if is_chinese_char(s):  # 中文 韩文 日文
+            if buffer:
                 output.append(buffer)
             buffer = ''
             if not s.strip() == '':
                 output.append(s)
+        else:  # 标点符号等, 面积147km² => 面 积 147 km²
+            if (pre_char is not None) and (pre_char in number) and s not in number:
+                if buffer:
+                    output.append(buffer)
+                buffer = ''
+                if not s.strip() == '':
+                    buffer += s
+            else:
+                buffer += s
+        pre_char = s
     if buffer:
         output.append(buffer)
     output.append('</s>')

@@ -4,7 +4,7 @@ import re
 
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”', '(', ')', '〈', '〉', '-', '–', '{', '}', '"', '·', '|',
-               ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=']
+               ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '˭']
 replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' '}
 
 
@@ -65,8 +65,10 @@ def parse_text(text: str):
 def parse_wk_file(path: str, name: str):
     file_path = os.path.join(path, name)
     ret = []
+    lines = 0
     with open(file_path, 'r') as file:
         for line in file.readlines():
+            lines = lines + 1
             fcc_data = json.loads(line)
             for key, value in fcc_data.items():
                 if key == "id":
@@ -82,11 +84,8 @@ def parse_wk_file(path: str, name: str):
                 else:
                     print(f"unknown key = {key} = > {value}")
                     exit(-1)
-    print(f"{name}.size={len(ret)}")
+    print(f"{name},lines={lines},size={len(ret)}")
     return ret
-
-    # with open(file_path) as file:
-    #     while()
 
 
 def process_dir(path: str, dir_name: str, corpus: str):
@@ -95,13 +94,14 @@ def process_dir(path: str, dir_name: str, corpus: str):
     raw_path = os.path.join("raw_data", corpus, dir_name + ".txt")
     with open(out_path, 'w') as f, open(raw_path, 'w') as raw_f:
         for file_name in os.listdir(os.path.join(path, dir_name)):
+            raw_f.write(f"\n{file_name}>>>>")
             result = parse_wk_file(os.path.join(path, dir_name), file_name)
             count += len(result)
             for text in result:
                 raw_f.write(text + "\n")
                 ret = to_lm_str(text)
                 f.write(ret + "\n")
-    print(f"dir={dir_name},size={count}")
+    print(f"dir_finish={dir_name},size={count}>>>>>>")
     return count
 
 

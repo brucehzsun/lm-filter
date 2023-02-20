@@ -4,9 +4,10 @@ import re
 
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”', '(', ')', '〈', '〉', '-', '–', '{', '}', '"', '·', '|',
-               ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '˭']
+               ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '˭', '※']
 replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' '}
 number = '0123456789'
+
 
 def is_chinese_char(ch: chr):
     return ('\u4e00' <= ch <= '\u9FFF') or ('\uAC00' <= ch <= '\uD7AF') or ('\u3040' <= ch <= '\u31FF')  # 中文 韩文 日文
@@ -123,7 +124,6 @@ def process_corpus(dir_path: str, corpus: str):
     for dir_name in os.listdir(path):
         if not dir_name.startswith("."):
             count += process_dir(path, dir_name, corpus)
-            break
     print(f"{corpus} finish,count={count} >>>>>>>>>>>>>>")
 
 

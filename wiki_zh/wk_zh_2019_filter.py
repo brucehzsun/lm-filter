@@ -1,6 +1,7 @@
 import os
 import json
 import re
+from utils import number_util
 
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”', '(', ')', '〈', '〉', '-', '–', '{', '}', '"', '·', '|',
@@ -51,6 +52,8 @@ def filter_raw_text(raw_text: str, en_dict: dict):
 
 
 def to_lm_str(text: str, en_dict: dict):
+    text = number_util.convert_number(text)
+
     output = []
     word = ''
     pre_char: chr = None
@@ -98,17 +101,17 @@ def parse_text(text: str):
             if result:
                 if (result.end() - result.start()) == 1:
                     continue
+                else:
+                    # 全中文情况下去除空格
+                    result = re.findall(r'[a-zA-Z0-9]+', value)
+                    if not result:
+                        value = value.replace(' ', '')
+                    value = value.strip()
+                    if len(value) < 3:
+                        continue
+                    ret.append(value)
             else:
-                continue
-            # 全中文情况下去除空格
-            result = re.findall(r'[a-zA-Z0-9]+', value)
-            if not result:
-                value = value.replace(' ', '')
-            value = value.strip()
-            if len(value) < 3:
-                continue
-            ret.append(value)
-        # if v.startwith("1\")
+                ret.append(value)
     return ret
 
 

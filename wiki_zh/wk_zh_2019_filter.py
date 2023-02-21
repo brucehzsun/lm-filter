@@ -155,8 +155,8 @@ def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
             # TODO 生成临时语料
             for line in lines:
                 data, raw_data = filter_raw_text(line, en_dict)
-                # for v in raw_data:
-                #     writer.write(v+"\n")
+                for v in raw_data:
+                    writer.write(v+"\n")
                 for text in data:
                     if text.strip() != '':
                         f.write(text + "\n")

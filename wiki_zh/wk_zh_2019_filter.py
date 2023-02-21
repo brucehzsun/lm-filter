@@ -49,10 +49,10 @@ def filter_raw_text(raw_text: str, en_dict: dict):
     raw_data = []
     text_list = parse_text(raw_text)
     for text in text_list:
-        ret = to_lm_str(text, en_dict)
+        ret, raw_ret = to_lm_str(text, en_dict)
         if ret is not None:
             result.append(ret)
-            raw_data.append(text)
+            raw_data.append(raw_ret)
     return result, raw_data
 
 
@@ -84,9 +84,9 @@ def to_lm_str(text: str, en_dict: dict):
         add_word_to_list(word, output, en_dict)
 
     if len(output) > 1:
-        return " ".join(output)
+        return " ".join(output), "".join(output)
     else:
-        return None
+        return None, None
 
 
 def parse_text(text: str):

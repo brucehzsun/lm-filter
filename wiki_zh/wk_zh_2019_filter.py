@@ -100,7 +100,7 @@ def parse_text(text: str):
             # 是否包含中文字符
             result = zhPattern.search(value)
             if result:
-                if (result.end() - result.start()) == 1:
+                if len(value) < 2:
                     continue
                 else:
                     # 全中文情况下去除空格

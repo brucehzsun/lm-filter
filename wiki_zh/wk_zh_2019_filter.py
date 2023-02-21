@@ -5,9 +5,10 @@ from utils import number_util
 
 number = '0123456789１２３４５６７８９０'
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
+delete_first = ['<br>', '</br>', '<div>', '</div>', '<ref>', '</ref>']
 delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”', '(', ')', '〈', '〉', '-', '–', '{', '}', '"', '·', '|',
                ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '』', '˭', '※', '〔 ',
-               '【', '】', '+', '™', '®', '・', '<br>', '<div>', '</div>']
+               '【', '】', '+', '™', '®', '・']
 replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', 'km²': "平方米", "km": "千米", '×': '乘'}
 
 
@@ -48,8 +49,9 @@ def filter_raw_text(raw_text: str, en_dict: dict):
     text_list = parse_text(raw_text)
     for text in text_list:
         ret = to_lm_str(text, en_dict)
-        result.append(ret)
-        raw_data.append(text)
+        if ret is not None:
+            result.append(ret)
+            raw_data.append(text)
     return result, raw_data
 
 
@@ -79,10 +81,17 @@ def to_lm_str(text: str, en_dict: dict):
         pre_char = ch
     if word:
         add_word_to_list(word, output, en_dict)
-    return " ".join(output)
+
+    if len(output) > 1:
+        return " ".join(output)
+    else:
+        return None
 
 
 def parse_text(text: str):
+    for split in delete_first:
+        text = text.replace(split, '\n')
+
     ret = []
     for v in text.split("\n\n"):
         v = v.strip()

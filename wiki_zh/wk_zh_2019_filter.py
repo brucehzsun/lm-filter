@@ -158,9 +158,10 @@ def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
                 # for v in raw_data:
                 #     writer.write(v+"\n")
                 for text in data:
-                    f.write(text + "\n")
-                    count = count + 1
-                    file_count = file_count + 1
+                    if text.strip() != '':
+                        f.write(text + "\n")
+                        count = count + 1
+                        file_count = file_count + 1
             print(f"{file_name},lines={len(lines)},size={file_count}")
     print(f"dir_finish={dir_name},size={count}>>>>>>")
     return count

@@ -5,7 +5,8 @@ from utils import number_util
 
 number = '0123456789１２３４５６７８９０'
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
-delete_first = ['<br>', '</br>', '<div>', '</div>', '<ref>', '</ref>']
+pattern_special = re.compile(r"<.*>")
+delete_first = ['<br>', '</br>', '<div>', '</div>']
 delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”', '(', ')', '〈', '〉', '-', '–', '{', '}', '"', '·', '|',
                ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '』', '˭', '※', '〔 ',
                '【', '】', '+', '™', '®', '・']
@@ -91,6 +92,10 @@ def to_lm_str(text: str, en_dict: dict):
 def parse_text(text: str):
     for split in delete_first:
         text = text.replace(split, '\n')
+
+    ret = pattern_special.search(text)
+    if ret:
+        text = re.sub(r"<.*>", '', text).replace(' ', '')
 
     ret = []
     for v in text.split("\n\n"):

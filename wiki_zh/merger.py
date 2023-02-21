@@ -15,6 +15,6 @@ def merger_wik(path: str, corpus: str):
 
 
 if __name__ == '__main__':
-    path = "/Users/brucesun/PycharmProjects/lm-filter/data"
+    path = "data"
     corpus = 'wiki_zh'
     merger_wik(path, corpus)

@@ -11,7 +11,6 @@ delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”',
 replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', 'km²': "平方米", "km": "千米"}
 
 
-
 def read_en_dict(path: str):
     en_dict = {}
     with open(path) as f:
@@ -45,11 +44,13 @@ def add_word_to_list(word: str, output: list, en_dict: dict):
 
 def filter_raw_text(raw_text: str, en_dict: dict):
     result = []
+    raw_data = []
     text_list = parse_text(raw_text)
     for text in text_list:
         ret = to_lm_str(text, en_dict)
         result.append(ret)
-    return result
+        raw_data.append(text)
+    return result, raw_data
 
 
 def to_lm_str(text: str, en_dict: dict):
@@ -108,11 +109,11 @@ def parse_text(text: str):
                     if not result:
                         value = value.replace(' ', '')
                     value = value.strip()
-                    if len(value) < 3:
-                        continue
-                    ret.append(value)
+                    if len(value) > 1:
+                        ret.append(value)
             else:
-                ret.append(value)
+                if len(value) > 1:
+                    ret.append(value)
     return ret
 
 
@@ -145,12 +146,16 @@ def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
     count = 0
     out_path = os.path.join("data", corpus, dir_name + ".txt")
     raw_path = os.path.join("raw_data", corpus, dir_name + ".txt")
-    with open(out_path, 'w') as f:
+    with open(out_path, 'w') as f, open(raw_path, 'w') as writer:
         for file_name in os.listdir(os.path.join(path, dir_name)):
             file_count = 0
             lines = read_wk_file(os.path.join(path, dir_name), file_name)
+            # TODO 生成临时语料
             for line in lines:
-                for text in filter_raw_text(line, en_dict):
+                data, raw_data = filter_raw_text(line, en_dict)
+                # for v in raw_data:
+                #     writer.write(v+"\n")
+                for text in data:
                     f.write(text + "\n")
                     count = count + 1
                     file_count = file_count + 1
@@ -169,7 +174,6 @@ def process_corpus(dir_path: str, corpus: str):
     for dir_name in os.listdir(path):
         if not dir_name.startswith("."):
             count += process_dir(path, dir_name, corpus, en_dict)
-            # break
     print(f"{corpus} finish,count={count} >>>>>>>>>>>>>>")
 
 

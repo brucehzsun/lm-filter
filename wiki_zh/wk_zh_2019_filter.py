@@ -148,6 +148,8 @@ def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
     raw_path = os.path.join("raw_data", corpus, dir_name + ".txt")
     with open(out_path, 'w') as f, open(raw_path, 'w') as writer:
         for file_name in os.listdir(os.path.join(path, dir_name)):
+            if file_name.startswith("."):
+                continue
             file_count = 0
             lines = read_wk_file(os.path.join(path, dir_name), file_name)
             # TODO 生成临时语料

@@ -46,10 +46,10 @@ def filter_text(data: str, en_dict: dict):
     return ret, raw_ret
 
 
-def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str):
+def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus_name: str):
     path = os.path.join(dir_path, file_name)
-    writer_path = os.path.join("data", corpus, file_name + ".txt")
-    raw_writer_path = os.path.join("raw_data", corpus, file_name + ".txt")
+    writer_path = os.path.join("data", corpus_name, file_name + ".txt")
+    raw_writer_path = os.path.join("raw_data", corpus_name, file_name + ".txt")
     print(f"start process {file_name}")
     sys.stdout.flush()
     total_count = 0
@@ -67,7 +67,8 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
                 if text.__contains__('??????'):
                     # 处理乱码
                     continue
-                for corpus, raw_corpus in filter_text(text, en_dict):
+                corpus_list, raw_corpus = filter_text(text, en_dict)
+                for corpus in corpus_list:
                     if corpus:
                         writer.write(corpus + "\n")
                         total_count += 1

@@ -1,14 +1,24 @@
-## news_2016_zh 语料
-2.3395 亿条 
-#### news2016zh_valid
+## 收集到的语料
 
-语料数：
+累计：3.14亿条语料(处理后)
 
-#### news2016zh_train
+### news_2016_zh 语料
 
-语料数：23395.0991 万条
+清洗后的语料数：2.3395 亿条
 
+### wiki_zh_2019
 
-nohup python3 src/new_zh/nwes_zh_filter.py > logs/news.log 2>&1 &
-nohup python3 src/baike_qa/baike_qa_filter.py > logs/baike.log 2>&1 &
+清洗后的语料数：3258.2909 万条
+
+### baike_qa_2016
+
+清洗后的语料数：4739.2483万条
+
+## 清洗命令
+
+```buildoutcfg
+nohup python3 src/new_zh/nwes_zh_filter.py > logs/news.log 2>&1 & 
+nohup python3 src/baike_qa/baike_qa_filter.py >logs/baike.log 2>&1 & 
 nohup python3 ./filter_wiki.sh > logs/wiki.log 2>&1 &
+
+```

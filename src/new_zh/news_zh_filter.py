@@ -1,6 +1,7 @@
 import os
 import json
 import sys
+import argparse
 from src.utils import en_dict_util
 from src.utils import text_filter
 
@@ -96,7 +97,13 @@ def process_corpus(dir_path: str, corpus: str):
 
 
 if __name__ == '__main__':
-    path = "/Users/brucesun/asr-corpus/lm"
-    path = "/home/bruce/asr/data"
+    parser = argparse.ArgumentParser(description='process your lm corpus')
+    parser.add_argument('--data_path', required=True, type=str, help='path of lm corpus')
+    args = parser.parse_args()
+
+    path = args.data_path
+    print(f"start news corpus process,path={path}")
+    # path = "/Users/brucesun/asr-corpus/lm"
+    # path = "/home/bruce/asr/data"
     corpus = 'new2016zh'
     process_corpus(path, corpus)

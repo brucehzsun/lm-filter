@@ -1,3 +1,4 @@
+import argparse
 import os
 import json
 import sys
@@ -84,11 +85,32 @@ def process_corpus(dir_path: str, corpus: str):
     print(f"{corpus} finish,count={count} >>>>>>>>>>>>>>")
 
 
+def merger_wik(path: str, corpus: str):
+    print(f"start merge multi file to one file...")
+    count = 0
+    path = os.path.join(path, corpus)
+    with open(path + ".txt", 'w') as writer:
+        for file_name in os.listdir(path):
+            with open(os.path.join(path, file_name), 'r') as f:
+                lines = f.readlines()
+                writer.writelines(lines)
+                print(f"writer {file_name}, size={len(lines)}")
+                count += len(lines)
+    print(f"finish, total size = {count}")
+
+
 if __name__ == '__main__':
-    path = "/Users/brucesun/asr-corpus/lm"
-    path = "/home/bruce/asr/data"
+    parser = argparse.ArgumentParser(description='process your lm corpus')
+    parser.add_argument('--data_path', required=True, type=str, help='path of lm corpus')
+    args = parser.parse_args()
+
+    path = args.data_path
+    print(f"start wiki_zh corpus process,path={path}")
+
+    # path = "/Users/brucesun/asr-corpus/lm"
+    # path = "/home/bruce/asr/data"
     corpus = 'wiki_zh'
     process_corpus(path, corpus)
 
-    # text = ["爱我中华", '中华人民共和国']
-    # writer_file(text, 'test')
+    # merger multi file to one file
+    merger_wik('data', corpus)

@@ -33,6 +33,18 @@ def split_json_text(line: str):
     return result
 
 
+def filter_text(data: str, en_dict: dict):
+    ret = []
+    raw_ret = []
+    text_list = text_filter.filter_text(data)
+    for text in text_list:
+        text, raw_data = text_filter.to_lm_str(text, en_dict)
+        if text:
+            ret.append(text)
+            raw_ret.append(raw_data)
+    return ret, raw_ret
+
+
 def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str):
     path = os.path.join(dir_path, file_name)
     writer_path = os.path.join("data", corpus, file_name + ".txt")
@@ -54,11 +66,9 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
                 if text.__contains__('??????'):
                     # 处理乱码
                     continue
-                text_list = text_filter.filter_text(text)
-                for t in text_list:
-                    t, raw_data = text_filter.to_lm_str(t, en_dict)
-                    if t:
-                        writer.write(t + "\n")
+                for corpus, raw_corpus in filter_text(text, en_dict):
+                    if corpus:
+                        writer.write(corpus + "\n")
                         total_count += 1
     print(f"{file_name} file finished,count={total_count}")
     sys.stdout.flush()

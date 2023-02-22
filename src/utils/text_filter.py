@@ -100,8 +100,8 @@ def add_word_to_list(word: str, output: list, en_dict: dict):
         output.append(word)
 
 
-def to_lm_str(text: str, en_dict: dict):
-    text = text.strip()
+def to_lm_str(data: str, en_dict: dict):
+    text = data.strip()
     if text is None or text == '':
         return None, None
 
@@ -132,6 +132,6 @@ def to_lm_str(text: str, en_dict: dict):
         add_word_to_list(word, output, en_dict)
 
     if len(output) > 1:
-        return " ".join(output), "".join(output)
+        return " ".join(output), text
     else:
         return None, None

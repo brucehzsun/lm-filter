@@ -63,6 +63,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
 
 
 def process_corpus(dir_path: str, corpus: str):
+    print(f"start news corpush process,{len(corpus)}")
     dict_path = 'cet4_dict.txt'
     en_dict: dict = en_dict_util.read_en_dict(dict_path)
     print(f"en_dict={len(en_dict)}")

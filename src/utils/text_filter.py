@@ -6,14 +6,16 @@ pattern_special = re.compile(r"<.*>")
 
 delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”', '(', ')', '〈', '〉', '-', '–', '{', '}', '"', '·', '|',
                ',', '‧', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '』', '˭', '※', '〔 ',
-               '【', '】', '〔', '〕', '[', ']' '+', '™', '®', '・']
-replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', 'km²': "平方米", "km": "千米", '×': '乘'}
+               '【', '】', '〔', '〕', '[', ']', '〖', '〗', '+', '™', '®', '・', '~', '`', '①', '②', '③', '④', '★', '⒈', '⒉',
+               '⒊', '⒋', '＠', '——', '^', '％', '<', '>']
+replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', '_': ' ', '一': ' ', 'km²': "平方米", "km": "千米", '×': '乘',
+               '<': ' ', '\\': ' '}
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 
 
 def split_text(text: str):
     result = []
-    for value in re.split(r"[，。？?！!：;；/:、／\n]", text):
+    for value in re.split(r"[,，.。？?！!：;；/:、／\r\n]", text):
         value = value.strip()
         if value:
             result.append(value)
@@ -41,7 +43,7 @@ def filter_text(text: str):
             # 替换
             for k, v in replace_map.items():
                 value = value.replace(k, v)
-            # 去掉1. 2. 3.
+            # 去掉1. 2. 3. ⒊
             value = re.sub("^\d.", '', value)
             # 是否包含中文字符
             result = zhPattern.search(value)
@@ -54,10 +56,10 @@ def filter_text(text: str):
                     if not result:
                         value = value.replace(' ', '')
                     value = value.strip()
-                    if len(value) > 1:
+                    if len(value) > 1 and len(value) < 80:
                         ret.append(value)
             else:
-                if len(value) > 1:
+                if len(value) > 1 and len(value) < 80:
                     ret.append(value)
     return ret
 

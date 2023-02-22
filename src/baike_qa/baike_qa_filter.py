@@ -44,19 +44,24 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
             for text in texts:
                 text_list = text_filter.filter_text(text)
                 for t in text_list:
-                    writer.write(t + "\n")
+                    t = t.strip()
+                    if t != '':
+                        t, raw_data = text_filter.to_lm_str(t, en_dict)
+                        if t:
+                            writer.write(t + "\n")
 
 
 def process_corpus(dir_path: str, corpus: str):
-    # dict_path = 'cet4_dict.txt'
-    # en_dict: dict = en_dict_util.read_en_dict(dict_path)
-    # print(f"en_dict={len(en_dict)}")
+    dict_path = 'cet4_dict.txt'
+    en_dict: dict = en_dict_util.read_en_dict(dict_path)
+    print(f"en_dict={len(en_dict)}")
 
     path = os.path.join(dir_path, corpus)
     count = 0
     for file_name in os.listdir(path):
         if not file_name.startswith("."):
-            process_baike_file(path, file_name, None, corpus)
+            process_baike_file(path, file_name, en_dict, corpus)
+            break
     print(f"{corpus} finish,count={count} >>>>>>>>>>>>>>")
 
 

@@ -1,6 +1,6 @@
 import os
 import json
-import re
+import sys
 from src.utils import en_dict_util
 from src.utils import text_filter
 
@@ -38,6 +38,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
     writer_path = os.path.join("data", corpus, file_name + ".txt")
     raw_writer_path = os.path.join("raw_data", corpus, file_name + ".txt")
     print(f"start process {file_name}")
+    sys.stdout.flush()
     total_count = 0
     with open(path) as file, open(writer_path, "w") as writer, open(raw_writer_path, 'w') as raw_writer:
         lines = file.readlines()
@@ -48,6 +49,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
             count += 1
             if count % 10000 == 0:
                 print(f"processed:{count}/{total_lines},count={total_count}...")
+                sys.stdout.flush()
             for text in split_json_text(line):
                 if text.__contains__('??????'):
                     # 处理乱码
@@ -59,6 +61,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
                         writer.write(t + "\n")
                         total_count += 1
     print(f"{file_name} file finished,count={total_count}")
+    sys.stdout.flush()
     return total_count
 
 
@@ -67,6 +70,7 @@ def process_corpus(dir_path: str, corpus: str):
     dict_path = 'cet4_dict.txt'
     en_dict: dict = en_dict_util.read_en_dict(dict_path)
     print(f"en_dict={len(en_dict)}")
+    sys.stdout.flush()
 
     path = os.path.join(dir_path, corpus)
     total_count = 0

@@ -1,5 +1,6 @@
 import os
 import json
+import sys
 from src.utils import text_filter
 from src.utils import en_dict_util
 
@@ -64,6 +65,7 @@ def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
                         count = count + 1
                         file_count = file_count + 1
             print(f"{file_name},lines={len(lines)},size={file_count}")
+            sys.stdout.flush()
     print(f"dir_finish={dir_name},size={count}>>>>>>")
     return count
 
@@ -72,6 +74,7 @@ def process_corpus(dir_path: str, corpus: str):
     dict_path = 'cet4_dict.txt'
     en_dict: dict = en_dict_util.read_en_dict(dict_path)
     print(f"en_dict={len(en_dict)}")
+    sys.stdout.flush()
 
     path = os.path.join(dir_path, corpus)
     count = 0

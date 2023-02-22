@@ -1,6 +1,7 @@
 import os
 import json
 import re
+import sys
 from src.utils import en_dict_util
 from src.utils import text_filter
 
@@ -32,6 +33,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
     path = os.path.join(dir_path, file_name)
     writer_path = os.path.join("data", corpus, file_name + ".txt")
     print(f"start process {file_name}")
+    sys.stdout.flush()
     total_count = 0
     with open(path) as file, open(writer_path, "w") as writer:
         lines = file.readlines()
@@ -41,6 +43,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
             count = count + 1
             if count % 10000 == 0:
                 print(f"processed:{count}/{total_lines},count={total_count}...")
+                sys.stdout.flush()
             for text in split_json_text(line):
                 if text.__contains__('??????'):
                     # 处理乱码
@@ -55,6 +58,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
                             writer.write(t + "\n")
                             total_count += 1
     print(f"{file_name} file finished,count={total_count}")
+    sys.stdout.flush()
     return total_count
 
 

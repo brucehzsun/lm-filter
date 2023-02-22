@@ -43,6 +43,10 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
             if count % 10000 == 0:
                 print(f"processed:{count}/{total_count}...")
             for text in texts:
+                if text.__contains__('??????'):
+                    # 处理乱码
+                    continue
+
                 text_list = text_filter.filter_text(text)
                 for t in text_list:
                     t = t.strip()

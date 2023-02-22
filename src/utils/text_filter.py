@@ -13,11 +13,12 @@ replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', '_': ' '
                '<': ' ', '\\': ' '}
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 digitPattern = re.compile(r'^[0-9０-９]+$')
+splitPattern = re.compile(r"[,，.。？?！!：;；/:、／\r\n]")
 
 
 def split_text(text: str):
     result = []
-    for value in re.split(r"[,，.。？?！!：;；/:、／\r\n]", text):
+    for value in splitPattern.split(text):
         value = value.strip()
         if value:
             result.append(value)
@@ -70,8 +71,8 @@ def filter_text(text: str):
                 if result:
                     # 纯数字不处理
                     continue
-                # elif 1 < len(value) < 60:
-                    ret.append(value)
+                    # elif 1 < len(value) < 60:
+                    # ret.append(value)
     return ret
 
 

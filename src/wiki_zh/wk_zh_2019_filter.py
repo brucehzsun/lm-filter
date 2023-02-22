@@ -83,6 +83,7 @@ def process_corpus(dir_path: str, corpus: str):
 
 if __name__ == '__main__':
     path = "/Users/brucesun/asr-corpus/lm"
+    path = "/home/bruce/asr/data"
     corpus = 'wiki_zh'
     process_corpus(path, corpus)
 

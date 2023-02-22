@@ -92,7 +92,6 @@ def process_corpus(dir_path: str, corpus: str):
             # continue
             count = process_baike_file(path, file_name, en_dict, corpus)
             total_count += count
-            break
     print(f"{corpus} finish,total_count={total_count} >>>>>>>>>>>>>>")
 
 

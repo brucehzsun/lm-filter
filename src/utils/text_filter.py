@@ -83,11 +83,17 @@ def add_word_to_list(word: str, output: list, en_dict: dict):
         # 英文
         if en_dict.get(word.lower()):
             output.append(word)
+    elif word.isnumeric():
+        return
     else:
         output.append(word)
 
 
 def to_lm_str(text: str, en_dict: dict):
+    text = text.strip()
+    if text is None or text == '':
+        return None, None
+
     text = number_util.convert_number(text)
 
     output = []

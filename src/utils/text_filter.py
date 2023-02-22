@@ -8,10 +8,11 @@ delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”',
                ',', '‧', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '』', '˭', '※', '〔 ', '≤', '≥',
                '【', '】', '〔', '〕', '［', '］', '[', ']', '〖', '〗', '+', '™', '®', '・', '~', '`', '①', '②', '③', '④', '⑤',
                '⑥', '⑦', '⑧', "'", '∶', '＂', '★', '⒈', '⒉', '⒊', '⒋', '＠', '——', '^', '％', '<', '>', '●', '→', '＝',
-               '――――――', '∴']
+               '――――――', '∴', '@']
 replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', '_': ' ', '一': ' ', 'km²': "平方米", "km": "千米", '×': '乘',
                '<': ' ', '\\': ' '}
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
+digitPattern = re.compile(r'^[0-9０-９]+$')
 
 
 def split_text(text: str):
@@ -59,8 +60,17 @@ def filter_text(text: str):
                     value = value.strip()
                     if 1 < len(value) < 60:
                         ret.append(value)
-            else:
+            elif value.isalpha():
+                # 英文场景
                 if 1 < len(value) < 60:
+                    ret.append(value)
+            else:
+                # 非中文和英文场景
+                result = digitPattern.search(value)
+                if result:
+                    # 纯数字不处理
+                    continue
+                # elif 1 < len(value) < 60:
                     ret.append(value)
     return ret
 

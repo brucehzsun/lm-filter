@@ -52,8 +52,6 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
             for text in texts:
                 text_list = text_filter.filter_text(text)
                 for t in text_list:
-                    #TODO delete
-                    raw_writer.write(t+"\n")
                     t, raw_data = text_filter.to_lm_str(t, en_dict)
                     if t:
                         writer.write(t + "\n")
@@ -71,9 +69,9 @@ def process_corpus(dir_path: str, corpus: str):
     total_count = 0
     for file_name in os.listdir(path):
         if not file_name.startswith("."):
-            if file_name == 'news2016zh_train.json':
-                # todo delete
-                continue
+            # if file_name == 'news2016zh_train.json':
+            # todo delete
+            # continue
             count = process_baike_file(path, file_name, en_dict, corpus)
             total_count += count
             break

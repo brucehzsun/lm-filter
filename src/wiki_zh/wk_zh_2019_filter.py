@@ -9,10 +9,11 @@ def filter_raw_text(raw_text: str, en_dict: dict):
     raw_data = []
     text_list = text_filter.split_text(raw_text)
     for text in text_list:
-        ret, raw_ret = text_filter.to_lm_str(text, en_dict)
-        if ret is not None:
-            result.append(ret)
-            raw_data.append(raw_ret)
+        for t in text_filter.filter_text(text):
+            ret, raw_ret = text_filter.to_lm_str(t, en_dict)
+            if ret is not None:
+                result.append(ret)
+                raw_data.append(raw_ret)
     return result, raw_data
 
 

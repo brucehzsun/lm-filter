@@ -61,7 +61,6 @@ def process_corpus(dir_path: str, corpus: str):
     for file_name in os.listdir(path):
         if not file_name.startswith("."):
             process_baike_file(path, file_name, en_dict, corpus)
-            break
     print(f"{corpus} finish,count={count} >>>>>>>>>>>>>>")
 
 

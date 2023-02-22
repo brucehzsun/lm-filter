@@ -1,3 +1,4 @@
+import datetime
 import os
 import json
 import re
@@ -33,7 +34,7 @@ def split_json_text(line: str):
 def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str):
     path = os.path.join(dir_path, file_name)
     writer_path = os.path.join("data", corpus, file_name + ".txt")
-    print(f"start process {file_name}")
+    print(f"start process {file_name},time={datetime.datetime.now()}")
     sys.stdout.flush()
     total_count = 0
     with open(path) as file, open(writer_path, "w") as writer:
@@ -43,7 +44,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
         for line in lines:
             count = count + 1
             if count % 10000 == 0:
-                print(f"processed:{count}/{total_lines},count={total_count}...")
+                print(f"processed:{count}/{total_lines},count={total_count},time={datetime.datetime.now()}...")
                 sys.stdout.flush()
             for text in split_json_text(line):
                 if text.__contains__('??????'):
@@ -58,7 +59,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
                         if t:
                             writer.write(t + "\n")
                             total_count += 1
-    print(f"{file_name} file finished,count={total_count}")
+    print(f"{file_name} file finished,count={total_count},time={datetime.datetime.now()}")
     sys.stdout.flush()
     return total_count
 
@@ -74,7 +75,7 @@ def process_corpus(dir_path: str, corpus: str):
         if not file_name.startswith("."):
             count = process_baike_file(path, file_name, en_dict, corpus)
             total_count += count
-    print(f"{corpus} finish,total_count={total_count} >>>>>>>>>>>>>>")
+    print(f"{corpus} finish,total_count={total_count},time={datetime.datetime.now()} >>>>>>>>>>>>>>")
 
 
 if __name__ == '__main__':
@@ -83,7 +84,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     path = args.data_path
-    print(f"start baike_qa corpus process,path={path}")
+    print(f"start baike_qa corpus process,path={path},time={datetime.datetime.now()}")
     # path = "/Users/brucesun/asr-corpus/lm"
     # path = "/home/bruce/asr/data"
     corpus = 'baike_qa2019'

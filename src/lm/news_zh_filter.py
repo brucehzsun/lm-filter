@@ -1,3 +1,4 @@
+import datetime
 import os
 import json
 import sys
@@ -61,7 +62,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus_name
         for line in lines:
             count += 1
             if count % 10000 == 0:
-                print(f"processed:{count}/{total_lines},count={total_count}...")
+                print(f"processed:{count}/{total_lines},count={total_count},time={datetime.datetime.now()}")
                 sys.stdout.flush()
             for text in split_json_text(line):
                 if text.__contains__('??????'):
@@ -72,13 +73,13 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus_name
                     if corpus:
                         writer.write(corpus + "\n")
                         total_count += 1
-    print(f"{file_name} file finished,count={total_count}")
+    print(f"{file_name} file finished,count={total_count},time={datetime.datetime.now()}")
     sys.stdout.flush()
     return total_count
 
 
 def process_corpus(dir_path: str, corpus: str):
-    print(f"start news corpush process,{len(corpus)}")
+    print(f"start news corpush process,{len(corpus)},time={datetime.datetime.now()}")
     dict_path = 'cet4_dict.txt'
     en_dict: dict = en_dict_util.read_en_dict(dict_path)
     print(f"en_dict={len(en_dict)}")
@@ -102,7 +103,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     path = args.data_path
-    print(f"start news corpus process,path={path}")
+    print(f"start news corpus process,path={path},time={datetime.datetime.now()}")
     # path = "/Users/brucesun/asr-corpus/lm"
     # path = "/home/bruce/asr/data"
     corpus = 'new2016zh'

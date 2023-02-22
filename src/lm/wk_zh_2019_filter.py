@@ -1,7 +1,10 @@
 import argparse
+import datetime
 import os
 import json
 import sys
+import time
+
 from src.utils import text_filter
 from src.utils import en_dict_util
 
@@ -94,9 +97,9 @@ def merger_wik(path: str, corpus: str):
             with open(os.path.join(path, file_name), 'r') as f:
                 lines = f.readlines()
                 writer.writelines(lines)
-                print(f"writer {file_name}, size={len(lines)}")
+                print(f"writer {file_name}, size={len(lines)},time={datetime.datetime.now()}")
                 count += len(lines)
-    print(f"finish, total size = {count}")
+    print(f"finish, total size = {count},time={datetime.datetime.now()}")
 
 
 if __name__ == '__main__':
@@ -105,7 +108,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     path = args.data_path
-    print(f"start wiki_zh corpus process,path={path}")
+    print(f"start wiki_zh corpus process,path={path},time={datetime.datetime.now()}")
 
     # path = "/Users/brucesun/asr-corpus/lm"
     # path = "/home/bruce/asr/data"

@@ -45,11 +45,10 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
         print(f"total count = {total_lines}")
         count = 0
         for line in lines:
-            texts = split_json_text(line)
             count += 1
             if count % 10000 == 0:
-                print(f"processed:{count}/{total_lines}...")
-            for text in texts:
+                print(f"processed:{count}/{total_lines},count={total_count}...")
+            for text in split_json_text(line):
                 if text.__contains__('??????'):
                     # 处理乱码
                     continue

@@ -8,8 +8,8 @@ zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 pattern_special = re.compile(r"<.*>")
 delete_first = ['<br>', '</br>', '<div>', '</div>']
 delete_list = ['《', '》', '（）', "「", "」", '）', '（', '“', '”', '(', ')', '〈', '〉', '-', '–', '{', '}', '"', '·', '|',
-               ',', '‧', '[', ']', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '』', '˭', '※', '〔 ',
-               '【', '】', '+', '™', '®', '・']
+               ',', '‧', '*', '#', '%', '±', '℃', ' ', '〇', '．', '……', '=', '&', '『', '』', '˭', '※', '〔 ',
+               '【', '】', '〔', '〕', '[', ']' '+', '™', '®', '・']
 replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', 'km²': "平方米", "km": "千米", '×': '乘'}
 
 
@@ -169,8 +169,9 @@ def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
             # TODO 生成临时语料
             for line in lines:
                 data, raw_data = filter_raw_text(line, en_dict)
-                for v in raw_data:
-                    writer.write(v + "\n")
+                # for v in raw_data:
+                # writer.write(v + "\n")
+                # writer.write(line + "\n")
                 for text in data:
                     if text.strip() != '':
                         f.write(text + "\n")

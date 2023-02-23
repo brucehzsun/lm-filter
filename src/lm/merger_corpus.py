@@ -25,8 +25,9 @@ def merger_wik(file_paths: list):
                         count += 1
                         total_size += 1
                         line = f.readline()  # 读取下一行
-                print(f"writer,path= {file_path}, size={count},total_size={total_size},time={datetime.datetime.now()}")
-    print(f"finish, total size = {total_size},time={datetime.datetime.now()}")
+                print(
+                    f"writer,path= {file_path}, size={count},total_size={total_size},filter_count={filter_count},time={datetime.datetime.now()}")
+    print(f"finish, total size = {total_size},filter_count={filter_count},time={datetime.datetime.now()}")
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 import kenlm
-import nlp
+import hashlib
 from pycorrector import Corrector
 
 
@@ -57,10 +57,17 @@ def kenlm_full_score(text: str, model: kenlm.LanguageModel):
 
 
 if __name__ == '__main__':
-    model = kenlm.LanguageModel('data/wiki_zh.bin')  # model=kenlm.LanguageModel('test.bin')一样的
-    sentences = ["滚滚长江东逝水", "长江滚滚水东逝", "长滚江水东滚逝", '真麻烦你了,希望你们好好的跳无', '真麻烦你了,希望你们好好的跳舞']
+    # model = kenlm.LanguageModel('data/wiki_zh.bin')  # model=kenlm.LanguageModel('test.bin')一样的
+    sentences = ["滚滚长江东逝水", "长江滚滚水东逝", "长滚江水东滚逝", "长滚江水东滚逝", '真麻烦你了,希望你们好好的跳无', '真麻烦你了,希望你们好好的跳舞']
+    map = {}
     for text in sentences:
-        kenlm_score(text, model)
+        # kenlm_score(text, model)
         # kenlm_full_score(text, model)
-        kenlm_state(text, model)
+        # kenlm_state(text, model)
+        md5_val = hashlib.md5(text.encode('utf8')).hexdigest()
+        if map.get(md5_val):
+            print("重复了")
+        else:
+            map[md5_val] = True
+            print(f"str={text},md5={md5_val}")
         print("")

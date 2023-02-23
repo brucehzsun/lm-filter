@@ -2,6 +2,7 @@ import argparse
 import os
 import datetime
 import hashlib
+import time
 
 
 def merger_wik(file_paths: list):
@@ -14,6 +15,7 @@ def merger_wik(file_paths: list):
         for file_path in file_paths:
             with open(file_path, 'r') as f:
                 count = 0
+                start_time = time.time()
                 line = f.readline()  # 读取第一行
                 while line is not None and line != '':
                     md5_val = hashlib.md5(line.encode('utf8')).hexdigest()
@@ -25,8 +27,10 @@ def merger_wik(file_paths: list):
                         count += 1
                         total_size += 1
                         line = f.readline()  # 读取下一行
+                        if count % 10000 == 0:
+                            print(f"processed:{count},time={(time.time() - start_time) * 1000}ms")
                 print(
-                    f"writer,path= {file_path}, size={count},total_size={total_size},filter_count={filter_count},time={datetime.datetime.now()}")
+                    f"writer,path= {file_path}, size={count},total_size={total_size},filter_count={filter_count},time={(time.time() - start_time) * 1000}ms")
     print(f"finish, total size = {total_size},filter_count={filter_count},time={datetime.datetime.now()}")
 
 

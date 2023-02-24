@@ -99,7 +99,7 @@ def to_lm_str(data: str, en_dict: dict):
                 add_word_to_list(ch, output, en_dict)
                 pre_char = ch
             word = ''
-        if ch.lower() in 'abcdefghijklmnopqrstuvwxyz':
+        if ch.lower() in 'abcdefghijklmnopqrstuvwxyz' or ch.lower() in 'ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ':
             # 英文字母 需要
             word += ch
             pre_char = ch

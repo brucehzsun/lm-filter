@@ -18,7 +18,7 @@ def merger_wik(file_paths: list):
                     count += 1
                     total_size += 1
                     line = f.readline()  # 读取下一行
-                    if count % 100000 == 0:
+                    if count % 10000000 == 0:
                         print(f"processed:{count},time={(time.time() - start_time) * 1000}ms")
                 used_time = (time.time() - start_time) * 1000
                 print(f"writer,path= {file_path}, size={count},total_size={total_size},time={used_time}ms")

@@ -85,6 +85,7 @@ def process_corpus(dir_path: str, corpus: str):
     for dir_name in os.listdir(path):
         if not dir_name.startswith("."):
             count += process_dir(path, dir_name, corpus, en_dict)
+            break
     print(f"{corpus} finish,count={count} >>>>>>>>>>>>>>")
 
 
@@ -116,4 +117,4 @@ if __name__ == '__main__':
     process_corpus(path, corpus)
 
     # merger multi file to one file
-    merger_wik('data', corpus)
+    # merger_wik('data', corpus)

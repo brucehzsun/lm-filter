@@ -20,5 +20,5 @@
 nohup python3 src/new_zh/nwes_zh_filter.py > logs/news.log 2>&1 & 
 nohup python3 src/baike_qa/baike_qa_filter.py >logs/baike.log 2>&1 & 
 nohup python3 ./filter_wiki.sh > logs/wiki.log 2>&1 &
-
+
 ```

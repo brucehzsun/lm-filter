@@ -14,7 +14,10 @@ def filter_raw_text(raw_text: str, en_dict: dict):
     raw_data = []
     text_list = text_filter.split_text(raw_text)
     for text in text_list:
-        for t in text_filter.filter_text(text):
+        corpus = text_filter.filter_text(text)
+        if corpus is None:
+            continue
+        for t in corpus:
             ret, raw_ret = text_filter.to_lm_str(t, en_dict)
             if ret is not None:
                 result.append(ret)

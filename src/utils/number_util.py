@@ -4,12 +4,31 @@ import re
 NUM_DICT = {'0': '零', '1': '一', '2': '二', '3': '三', '4': '四', '5': '五', '6': '六', '7': '七', '8': '八', '9': '九',
             '０': '零', '１': '一', '２': '二', '３': '三', '４': '四', '５': '五', '６': '六', '７': '七', '８': '八', '９': '九'}
 
+enDigitPattern = re.compile('\d+,\d+')
+floatDigitPattern = re.compile('\d+\.\d+')
 pattern_date = re.compile(r'[0-9０-９]{2,4}年')  # 查找日期时间数字
 pattern_number = re.compile(r'[0-9０-９]+')
 pattern_phone = re.compile(
     r'((\d{11})|((\d{7,8})|(\d{4}|\d{3})-(\d{7,8})|(\d{4}|\d{3})-(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})|(\d{7,8})-(\d{4}|\d{3}|\d{2}|\d{1})))')  # 查找电话号码
 number = '0123456789１２３４５６７８９０'
 
+def enDigitReplace(corpus: str):
+    searchMatch = enDigitPattern.search(corpus)
+    while searchMatch:
+        groupMatch = searchMatch.group()
+        corpus = corpus.replace(groupMatch, groupMatch.replace(',', ''))
+        searchMatch = enDigitPattern.search(corpus)
+    return corpus
+
+
+def floatDigitReplace(corpus: str):
+    searchMatch = floatDigitPattern.search(corpus)
+    while searchMatch:
+        groupMatch = searchMatch.group()
+        cnNum = cn2an.an2cn(groupMatch)
+        corpus = corpus.replace(groupMatch, cnNum)
+        searchMatch = floatDigitPattern.search(corpus)
+    return corpus
 
 def convert_normal_number(text: str):
     letters = [x for x in text]

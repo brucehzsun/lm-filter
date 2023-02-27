@@ -1,20 +1,16 @@
 from src.utils import text_filter
+import re
+from src.utils import number_util
+import cn2an
 
 if __name__ == '__main__':
-    corpus_list = ["I am a teacher",
-                   "我有很多特殊字符好像有9个how are you﹏和……",
-                   "18601291823"
+    corpus_list = ['矩震级高达8.1,震源深度15千米',
+                   '关东大地震死亡人数估计大约介于100,000至142,000人',
+                   '日本时间12时1分与3分又分别发生规模7.3与7.2的余震'
                    ]
-    # for corpus in corpus_list:
-    #     text_list = text_filter.filter_text(corpus)
-    for text in corpus_list:
-        print(f"{text}")
-        for ch in text:
-            if ch.isalpha():
-                print(f"ch is alpha={ch}")
-            # if text_filter.is_chinese_char(ch):
-            #     print(ch)
-            # if ch in '0123456789':
-            #     print(f"数字={ch}")
-            # if ch.lower() in 'abcdefghijklmnopqrstuvwxyz':
-            #     print(f"英文={ch}")
+    for corpus in corpus_list:
+        text_list = text_filter.split_text(corpus)
+        for text in text_list:
+            for t in text_filter.filter_text(text):
+                ret, raw_ret = text_filter.to_lm_str(t, None)
+                print(ret)

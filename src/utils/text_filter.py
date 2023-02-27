@@ -5,7 +5,7 @@ from src.utils import number_util
 
 pattern_special = re.compile(r"<.*>")
 
-replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', '_': ' ', '一': ' ', 'km²': "平方米", "km": "千米", '×': '乘',
+replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', '_': ' ', 'km²': "平方米", "km": "千米", '×': '乘',
                '<': ' ', '\\': ' '}
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 enOnlyPattern = re.compile(r'^[a-z A-Z]+$')
@@ -13,11 +13,14 @@ enOnlyPattern = re.compile(r'^[a-z A-Z]+$')
 digitPattern = re.compile(r'^[0-9０-９]+$')
 splitPattern = re.compile(r"[,，.。？?！!：;；/:／、\r\n]")
 replaceSpacePattern = re.compile(r"[、]")
-replaceTitlePattern = re.compile("^\d[.．]")
+replaceTitlePattern = re.compile("^\d[\.\．]")
 
 
 def split_text(text: str):
     result = []
+    text = number_util.enDigitReplace(text)
+    text = number_util.floatDigitReplace(text)
+
     for value in splitPattern.split(text):
         value = value.strip()
         if value:
@@ -25,34 +28,33 @@ def split_text(text: str):
     return result
 
 
-def filter_text(raw_text: str):
-    ret = pattern_special.search(raw_text)
+def filter_text(text: str):
+    ret = pattern_special.search(text)
     if ret:
-        raw_text = re.sub(r"<.*>", '\n', raw_text)
+        raw_text = re.sub(r"<.*>", '\n', text)
 
     ret = []
-    for text in split_text(raw_text):
-        text = text.strip()
+    text = text.strip()
 
-        # 替换
-        for k, v in replace_map.items():
-            text = text.replace(k, v)
-        # 去掉1. 2. 3. ⒊
-        text = replaceTitlePattern.sub('', text)
-        text = replaceSpacePattern.sub(' ', text)
+    # 替换
+    for k, v in replace_map.items():
+        text = text.replace(k, v)
+    # 去掉1. 2. 3. ⒊
+    text = replaceTitlePattern.sub('', text)
+    text = replaceSpacePattern.sub(' ', text)
 
-        # 不包含中文场景全部不要
-        result = zhPattern.search(text)
-        if result is None:
-            continue
+    # 不包含中文场景全部不要
+    result = zhPattern.search(text)
+    if result is None:
+        return None
 
-        result = digitPattern.search(text)
-        if result:
-            continue
+    result = digitPattern.search(text)
+    if result:
+        return None
 
-        text = text.strip()
-        if 1 < len(text) < 80:
-            ret.append(text)
+    text = text.strip()
+    if 1 < len(text) < 80:
+        ret.append(text)
     return ret
 
 
@@ -104,7 +106,7 @@ def to_lm_str(data: str, en_dict: dict):
             word += ch
             pre_char = ch
         elif ch == ' ':  # 空格 区分单词
-            add_word_to_list(word,output,en_dict)
+            add_word_to_list(word, output, en_dict)
             pre_char = ch
             word = ''
         else:  # 标点符号等, 面积147km² => 面 积 147 km²

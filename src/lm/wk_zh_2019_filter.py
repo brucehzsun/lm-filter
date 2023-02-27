@@ -9,9 +9,6 @@ from src.utils import text_filter
 from src.utils import en_dict_util
 
 
-
-
-
 def read_wk_file(path: str, name: str):
     file_path = os.path.join(path, name)
     ret = []
@@ -50,11 +47,12 @@ def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
             # TODO 生成临时语料
             for line in lines:
                 data, raw_data = text_filter.filter_raw_text(line, en_dict)
+                if data is None or data == '':
+                    continue
                 for text in data:
-                    if text.strip() != '':
-                        f.write(text + "\n")
-                        count = count + 1
-                        file_count = file_count + 1
+                    f.write(text + "\n")
+                    count = count + 1
+                    file_count = file_count + 1
             print(f"{file_name},lines={len(lines)},size={file_count}")
             sys.stdout.flush()
     print(f"dir_finish={dir_name},size={count}>>>>>>")

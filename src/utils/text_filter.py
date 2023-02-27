@@ -18,16 +18,19 @@ replaceTitlePattern = re.compile("^\d[\.\．]")
 
 def split_text(text: str):
     result = []
-    text = number_util.enDigitReplace(text)
-    text = number_util.floatDigitReplace(text)
+    try:
+        text = number_util.enDigitReplace(text)
+        text = number_util.floatDigitReplace(text)
 
-    for value in splitPattern.split(text):
-        value = value.strip()
-        if value is None or value.__contains__('??????'):
-            continue
+        for value in splitPattern.split(text):
+            value = value.strip()
+            if value is None or value.__contains__('??????'):
+                continue
 
-        result.append(value)
-    return result
+            result.append(value)
+        return result
+    except ValueError:
+        print(f"ValueError:{text}")
 
 
 def filter_text(text: str):
@@ -64,15 +67,19 @@ def filter_raw_text(raw_text: str, en_dict: dict):
     result = []
     raw_data = []
     text_list = split_text(raw_text)
+    if text_list is None:
+        return None, None
+
     for text in text_list:
         corpus = filter_text(text)
         if corpus is None:
             continue
         for t in corpus:
             ret, raw_ret = to_lm_str(t, en_dict)
-            if ret is not None:
-                result.append(ret)
-                raw_data.append(raw_ret)
+            if ret is None or ret == '':
+                continue
+            result.append(ret)
+            raw_data.append(raw_ret)
     return result, raw_data
 
 

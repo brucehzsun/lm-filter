@@ -9,20 +9,7 @@ from src.utils import text_filter
 from src.utils import en_dict_util
 
 
-def filter_raw_text(raw_text: str, en_dict: dict):
-    result = []
-    raw_data = []
-    text_list = text_filter.split_text(raw_text)
-    for text in text_list:
-        corpus = text_filter.filter_text(text)
-        if corpus is None:
-            continue
-        for t in corpus:
-            ret, raw_ret = text_filter.to_lm_str(t, en_dict)
-            if ret is not None:
-                result.append(ret)
-                raw_data.append(raw_ret)
-    return result, raw_data
+
 
 
 def read_wk_file(path: str, name: str):
@@ -62,7 +49,7 @@ def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
             lines = read_wk_file(os.path.join(path, dir_name), file_name)
             # TODO 生成临时语料
             for line in lines:
-                data, raw_data = filter_raw_text(line, en_dict)
+                data, raw_data = text_filter.filter_raw_text(line, en_dict)
                 for text in data:
                     if text.strip() != '':
                         f.write(text + "\n")

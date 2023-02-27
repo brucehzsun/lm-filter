@@ -3,14 +3,14 @@
 # Press ⌃R to execute it or replace it with your code.
 # Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
 
-from src.utils import en_dict_util as en_dict
-from src.lm import wk_zh_2019_filter as wk
+from src.utils import text_filter
+from src.utils import en_dict_util
 
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
     dict_path = 'cet4_dict.txt'
-    en_dict: dict = en_dict.read_en_dict(dict_path)
+    en_dict: dict = en_dict_util.read_en_dict(dict_path)
 
     corpus_list = ['i am teacher', '1.面积147km²好大呀',
                    '２.王双骏现时的妻子为电子音乐组合PixelToy前主音胡咏丝Candy',
@@ -67,7 +67,7 @@ if __name__ == '__main__':
 
     results = []
     for corpus in corpus_list:
-        text_list, raw_data = wk.filter_raw_text(corpus, en_dict)
+        text_list, raw_data = text_filter.filter_raw_text(corpus, en_dict)
         for text in text_list:
             results.append(text)
 

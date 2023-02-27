@@ -8,7 +8,7 @@ from src.utils import en_dict_util
 from src.utils import text_filter
 
 
-def split_json_text(line: str):
+def parse_json_text(line: str):
     result = []
     json_data = json.loads(line)
     # 处理category
@@ -16,15 +16,15 @@ def split_json_text(line: str):
         result.append(value)
 
     # 处理 title,desc,answer
-    title_list = text_filter.split_text(json_data['title'])
+    title_list = json_data['title']
     if len(title_list) > 0:
         result.extend(title_list)
 
-    desc_list = text_filter.split_text(json_data['desc'])
+    desc_list = json_data['desc']
     if len(desc_list) > 0:
         result.extend(desc_list)
 
-    answer_list = text_filter.split_text(json_data['answer'])
+    answer_list = json_data['answer']
     if len(answer_list) > 0:
         result.extend(answer_list)
 
@@ -46,19 +46,11 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str
             if count % 10000 == 0:
                 print(f"processed:{count}/{total_lines},count={total_count},time={datetime.datetime.now()}...")
                 sys.stdout.flush()
-            for text in split_json_text(line):
-                if text.__contains__('??????'):
-                    # 处理乱码
-                    continue
-
-                text_list = text_filter.filter_text(text)
-                for t in text_list:
-                    t = t.strip()
-                    if t != '':
-                        t, raw_data = text_filter.to_lm_str(t, en_dict)
-                        if t:
-                            writer.write(t + "\n")
-                            total_count += 1
+            for text in parse_json_text(line):
+                data_list, raw_data_list = text_filter.filter_raw_text(text, en_dict)
+                for t in data_list:
+                    writer.write(t + "\n")
+                    total_count += 1
     print(f"{file_name} file finished,count={total_count},time={datetime.datetime.now()}")
     sys.stdout.flush()
     return total_count

@@ -23,8 +23,10 @@ def split_text(text: str):
 
     for value in splitPattern.split(text):
         value = value.strip()
-        if value:
-            result.append(value)
+        if value is None or value.__contains__('??????'):
+            continue
+
+        result.append(value)
     return result
 
 
@@ -56,6 +58,22 @@ def filter_text(text: str):
     if 1 < len(text) < 80:
         ret.append(text)
     return ret
+
+
+def filter_raw_text(raw_text: str, en_dict: dict):
+    result = []
+    raw_data = []
+    text_list = split_text(raw_text)
+    for text in text_list:
+        corpus = filter_text(text)
+        if corpus is None:
+            continue
+        for t in corpus:
+            ret, raw_ret = to_lm_str(t, en_dict)
+            if ret is not None:
+                result.append(ret)
+                raw_data.append(raw_ret)
+    return result, raw_data
 
 
 def is_chinese_char(ch: chr):

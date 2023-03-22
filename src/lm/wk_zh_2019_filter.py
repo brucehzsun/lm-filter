@@ -37,8 +37,7 @@ def read_wk_file(path: str, name: str):
 def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
     count = 0
     out_path = os.path.join("data", corpus, dir_name + ".txt")
-    raw_path = os.path.join("raw_data", corpus, dir_name + ".txt")
-    with open(out_path, 'w') as f, open(raw_path, 'w') as writer:
+    with open(out_path, 'w') as f:
         for file_name in os.listdir(os.path.join(path, dir_name)):
             if file_name.startswith("."):
                 continue

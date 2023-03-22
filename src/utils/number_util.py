@@ -1,3 +1,4 @@
+import cn2an
 import re
 
 NUM_DICT = {'0': '零', '1': '一', '2': '二', '3': '三', '4': '四', '5': '五', '6': '六', '7': '七', '8': '八', '9': '九',
@@ -20,6 +21,36 @@ def enDigitReplace(corpus: str):
     return corpus
 
 
+def floatDigitReplace(corpus: str):
+    searchMatch = floatDigitPattern.search(corpus)
+    while searchMatch:
+        groupMatch = searchMatch.group()
+        cnNum = cn2an.an2cn(groupMatch)
+        corpus = corpus.replace(groupMatch, cnNum)
+        searchMatch = floatDigitPattern.search(corpus)
+    return corpus
+
+def convert_normal_number(text: str):
+    letters = [x for x in text]
+    ret = pattern_number.search(text)
+    while ret is not None:
+        num = "".join(letters[ret.start():ret.end()])
+        text = text.replace(num, cn2an.an2cn(num), 1)
+        ret = pattern_number.search(text)
+        letters = [x for x in text]
+    return text
+
+
+def convert_phone_number(text: str):
+    letters = [x for x in text]
+    ret = pattern_phone.search(text)
+    while ret is not None:
+        for i in range(ret.span()[0], ret.span()[1]):
+            if letters[i] in number:
+                letters[i] = NUM_DICT[text[i]]
+        ret = pattern_phone.search(''.join(letters))
+    return "".join(letters)
+
 
 def convert_data_number(text: str):
     letters = [x for x in text]
@@ -30,6 +61,14 @@ def convert_data_number(text: str):
                 letters[i] = NUM_DICT[letters[i]]
         ret = pattern_date.search(''.join(letters))
     return "".join(letters)
+
+
+def convert_number(text: str):
+    text = convert_data_number(text)
+    text = convert_phone_number(text)
+    text = convert_normal_number(text)
+    return text
+
 
 if __name__ == '__main__':
     text = '筑后史谈会　昭和１０年刊の复制'

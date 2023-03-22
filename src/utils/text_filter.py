@@ -1,12 +1,7 @@
 # coding:utf-8
 
 import re
-import sys
-
 from src.utils import number_util
-from tn.chinese.normalizer import Normalizer
-
-normalizer = Normalizer(cache_dir='tn')
 
 pattern_special = re.compile(r"<.*>")
 
@@ -19,8 +14,6 @@ digitPattern = re.compile(r'^[0-9０-９]+$')
 splitPattern = re.compile(r"[,，.。？?！!：;；/:／、\r\n]")
 replaceSpacePattern = re.compile(r"[、]")
 replaceTitlePattern = re.compile("^\d[\.\．]")
-
-black_map = {'呃': '呃', '啊': '啊'}
 
 
 def split_text(text: str):
@@ -160,64 +153,26 @@ def to_lm_str(data: str, en_dict: dict):
         return None, None
 
 
-def get_en_words(corpus: str):
-    en_word = ''
-    word_list = []
-    for ch in corpus:
-        if is_chinese_char(ch):  # 中文 韩文 日文
-            # 1.中文需要
-            if en_word != '':
-                word_list.append(en_word)
-                en_word = ''
-        if ch.lower() in 'abcdefghijklmnopqrstuvwxyz':
-            # 英文字母 需要
-            en_word += ch.lower()
-        elif ch == ' ':  # 空格 区分单词
-            word_list.append(en_word)
-            en_word = ''
-        else:
-            pass
-            # if en_word != '':
-            #     word_list.append(en_word)
-            #     en_word = ''
-
-    if en_word != '':
-        word_list.append(en_word)
-
-    return word_list
-
-
-def convert_to_lm_text(text: str):
-    corpus = text.replace('\n', '')
-    word_list = get_en_words(corpus)
-    if black_map.__contains__(text[0]):
-        pass
-    else:
-        corpus = normalizer.normalize(corpus)
-
+def convert_to_lm_text(corpus: str):
     en_word = ''
     lm_corpus = []
     for ch in corpus:
         if is_chinese_char(ch):  # 中文 韩文 日文
             # 1.中文需要
             lm_corpus.append(ch)
+            pre_char = ch
             word = ''
         if ch.lower() in 'abcdefghijklmnopqrstuvwxyz':
             # 英文字母 需要
             en_word += ch.lower()
-            if word_list.__contains__(en_word):
-                lm_corpus.append(en_word)
-                del word_list[0]
-                en_word = ''
-
+            pre_char = ch
         elif ch == ' ':  # 空格 区分单词
+            pre_char = ch
             lm_corpus.append(en_word)
             en_word = ''
         else:
             pass
-
-    if word_list.__contains__(en_word):
+    if en_word != '':
         lm_corpus.append(en_word)
-        del word_list[0]
 
     return ' '.join(lm_corpus)

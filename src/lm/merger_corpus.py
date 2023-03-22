@@ -29,12 +29,13 @@ if __name__ == '__main__':
     print(f"start merger corpus process,time={datetime.datetime.now()}")
 
     file_paths = []
-    file_paths.append(os.path.join('data', 'baike_qa2019', 'baike_qa_valid.json.txt'))
-    file_paths.append(os.path.join('data', 'baike_qa2019', 'baike_qa_train.json.txt'))
+    file_paths.append(os.path.join('data', 'baike_qa', 'baike_qa_valid.json.txt'))
+    file_paths.append(os.path.join('data', 'baike_qa', 'baike_qa_train.json.txt'))
 
-    file_paths.append(os.path.join('data', 'new2016zh', 'news2016zh_train.json.txt'))
-    file_paths.append(os.path.join('data', 'new2016zh', 'news2016zh_valid.json.txt'))
+    file_paths.append(os.path.join('data', 'news_zh', 'news2016zh_train.json.txt'))
+    file_paths.append(os.path.join('data', 'news_zh', 'news2016zh_valid.json.txt'))
 
     file_paths.append(os.path.join('data', 'wiki_zh.txt'))
+    file_paths.append(os.path.join('data', 'rokid_train.txt'))
 
     merger_wik(file_paths)

@@ -31,9 +31,13 @@ def parse_json_text(line: str):
     return result
 
 
-def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus: str):
+def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus_name: str):
+    out_dir = os.path.join('data', corpus_name)
+    if not os.path.exists(out_dir):
+        os.makedirs(out_dir)
+
     path = os.path.join(dir_path, file_name)
-    writer_path = os.path.join("data", corpus, file_name + ".txt")
+    writer_path = os.path.join(out_dir, file_name + ".txt")
     print(f"start process {file_name},time={datetime.datetime.now()}")
     sys.stdout.flush()
     total_count = 0

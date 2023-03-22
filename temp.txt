@@ -1,0 +1,1 @@
+docker run -it --rm --name lm-filter -v /Users/brucesun/PycharmProjects/lm-filter:/home/admin/lm-filter lm-filter:1.0 bash

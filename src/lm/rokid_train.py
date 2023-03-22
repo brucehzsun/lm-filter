@@ -19,7 +19,6 @@ def process_corpus(dir_path: str, corpus_name: str):
             corpus = line.split(' ', 1)[1]
             if (count == 0):
                 print(f"origin={line},corpus={corpus}")
-            print(f'corpus={corpus}')
             lm_text = text_filter.convert_to_lm_text(corpus)
             if lm_text is None or lm_text == '':
                 continue

@@ -16,7 +16,7 @@ replaceSpacePattern = re.compile(r"[、]")
 replaceTitlePattern = re.compile("^\d[\.\．]")
 
 
-def split_text(text: str):
+def split_text(text: str, filter_bad_text: bool):
     result = []
     try:
         text = number_util.enDigitReplace(text)
@@ -24,9 +24,10 @@ def split_text(text: str):
 
         for value in splitPattern.split(text):
             value = value.strip()
-            if value is None or value.__contains__('??????'):
+            if value is None:
                 continue
-
+            if filter_bad_text and value.__contains__('??????????'):
+                continue
             result.append(value)
         return result
     except ValueError:
@@ -63,10 +64,10 @@ def filter_text(text: str):
     return ret
 
 
-def filter_raw_text(raw_text: str, en_dict: dict):
+def filter_raw_text(raw_text: str, en_dict: dict, filter_bad_text: bool):
     result = []
     raw_data = []
-    text_list = split_text(raw_text)
+    text_list = split_text(raw_text, filter_bad_text)
     if text_list is None:
         return None, None
 

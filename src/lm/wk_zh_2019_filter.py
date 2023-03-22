@@ -49,7 +49,7 @@ def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
             lines = read_wk_file(os.path.join(path, dir_name), file_name)
             # TODO 生成临时语料
             for line in lines:
-                data, raw_data = text_filter.filter_raw_text(line, en_dict)
+                data, raw_data = text_filter.filter_raw_text(line, en_dict, False)
                 if data is None or data == '':
                     continue
                 for text in data:

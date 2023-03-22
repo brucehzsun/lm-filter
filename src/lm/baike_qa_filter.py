@@ -51,7 +51,7 @@ def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus_name
                 print(f"processed:{count}/{total_lines},count={total_count},time={datetime.datetime.now()}...")
                 sys.stdout.flush()
             for text in parse_json_text(line):
-                data_list, raw_data_list = text_filter.filter_raw_text(text, en_dict)
+                data_list, raw_data_list = text_filter.filter_raw_text(text, en_dict, False)
                 for t in data_list:
                     writer.write(t + "\n")
                     total_count += 1

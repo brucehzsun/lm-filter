@@ -157,17 +157,17 @@ def convert_to_lm_text(corpus: str):
     en_word = ''
     lm_corpus = []
     for ch in corpus:
+        ch = ch.strip()
+        if ch == '':
+            continue
         if is_chinese_char(ch):  # 中文 韩文 日文
             # 1.中文需要
             lm_corpus.append(ch)
-            pre_char = ch
-            word = ''
+            en_word = ''
         if ch.lower() in 'abcdefghijklmnopqrstuvwxyz':
             # 英文字母 需要
             en_word += ch.lower()
-            pre_char = ch
         elif ch == ' ':  # 空格 区分单词
-            pre_char = ch
             lm_corpus.append(en_word)
             en_word = ''
         else:

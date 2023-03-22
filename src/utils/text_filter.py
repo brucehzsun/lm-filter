@@ -20,6 +20,8 @@ splitPattern = re.compile(r"[,，.。？?！!：;；/:／、\r\n]")
 replaceSpacePattern = re.compile(r"[、]")
 replaceTitlePattern = re.compile("^\d[\.\．]")
 
+black_map = {'呃': '呃', '啊': '啊'}
+
 
 def split_text(text: str):
     result = []
@@ -188,7 +190,10 @@ def get_en_words(corpus: str):
 def convert_to_lm_text(text: str):
     corpus = text.replace('\n', '')
     word_list = get_en_words(corpus)
-    corpus = normalizer.normalize(corpus)
+    if black_map.__contains__(text[0]):
+        pass
+    else:
+        corpus = normalizer.normalize(corpus)
 
     en_word = ''
     lm_corpus = []

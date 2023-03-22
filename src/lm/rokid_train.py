@@ -27,6 +27,7 @@ def process_corpus(dir_path: str, corpus_name: str):
             count = count + 1
             if count % 10000 == 0:
                 print(f"process {count}/{total_len}")
+                sys.stdout.flush()
         sys.stdout.flush()
     print(f"process_corpus finish,{corpus_name},size={count}>>>>>>")
 

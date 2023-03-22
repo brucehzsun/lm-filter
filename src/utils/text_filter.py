@@ -5,8 +5,8 @@ from src.utils import number_util
 
 pattern_special = re.compile(r"<.*>")
 
-replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', '_': ' ', 'km²': "平方米", "km": "千米", '×': '乘',
-               '<': ' ', '\\': ' '}
+replace_map = {'～': '到', '.': "", ':': '', '°': '度', '－': ' ', '_': ' ', 'km²': "平方千米", "km": "千米", '×': '乘',
+               '<': ' ', '\\': ' ', 'kg': '千克'}
 zhPattern = re.compile(u'[\u4e00-\u9fa5]+')
 enOnlyPattern = re.compile(r'^[a-z A-Z]+$')
 # enOnlyPattern = re.compile('^w+$')

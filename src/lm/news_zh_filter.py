@@ -103,5 +103,5 @@ if __name__ == '__main__':
     print(f"start news corpus process,path={path},time={datetime.datetime.now()}")
     # path = "/Users/brucesun/asr-corpus/lm"
     # path = "/home/bruce/asr/data"
-    corpus = 'new2016zh'
+    corpus = 'news_zh'
     process_corpus(path, corpus)

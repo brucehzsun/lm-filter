@@ -79,5 +79,5 @@ if __name__ == '__main__':
     print(f"start baike_qa corpus process,path={path},time={datetime.datetime.now()}")
     # path = "/Users/brucesun/asr-corpus/lm"
     # path = "/home/bruce/asr/data"
-    corpus = 'baike_qa2019'
+    corpus = 'baike_qa'
     process_corpus(path, corpus)

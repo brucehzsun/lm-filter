@@ -162,15 +162,16 @@ def convert_to_lm_text(corpus: str):
             if ch.strip() != '':
                 lm_corpus.append(ch.strip())
                 en_word = ''
-        if ch.lower() in 'abcdefghijklmnopqrstuvwxyz':
+        if ch.strip().lower() in 'abcdefghijklmnopqrstuvwxyz':
             # 英文字母 需要
-            en_word += ch.lower()
+            en_word += ch.strip().lower()
         elif ch == ' ':  # 空格 区分单词
-            lm_corpus.append(en_word.strip())
-            en_word = ''
+            if en_word.strip() != '':
+                lm_corpus.append(en_word.strip())
+                en_word = ''
         else:
             pass
-    if en_word != '':
+    if en_word.strip() != '':
         lm_corpus.append(en_word.strip())
 
     return ' '.join(lm_corpus)

@@ -2,6 +2,9 @@
 
 import re
 from src.utils import number_util
+from tn.chinese.normalizer import Normalizer
+
+normalizer = Normalizer(cache_dir='tn')
 
 pattern_special = re.compile(r"<.*>")
 
@@ -153,26 +156,58 @@ def to_lm_str(data: str, en_dict: dict):
         return None, None
 
 
+def get_word_map(corpus: str):
+    en_word = ''
+    word_list = []
+    for ch in corpus:
+        if is_chinese_char(ch):  # 中文 韩文 日文
+            # 1.中文需要
+            word_list.append(ch)
+            word = ''
+        if ch.lower() in 'abcdefghijklmnopqrstuvwxyz':
+            # 英文字母 需要
+            en_word += ch.lower()
+        elif ch == ' ':  # 空格 区分单词
+            word_list.append(en_word)
+            en_word = ''
+        else:
+            pass
+
+    if en_word != '':
+        word_list.append(en_word)
+
+    return word_list
+
+
 def convert_to_lm_text(corpus: str):
+    corpus = corpus.replace('\n', '')
+    word_list = get_word_map(corpus)
+    corpus = normalizer.normalize(corpus)
+
     en_word = ''
     lm_corpus = []
     for ch in corpus:
         if is_chinese_char(ch):  # 中文 韩文 日文
             # 1.中文需要
             lm_corpus.append(ch)
-            pre_char = ch
             word = ''
         if ch.lower() in 'abcdefghijklmnopqrstuvwxyz':
             # 英文字母 需要
             en_word += ch.lower()
-            pre_char = ch
+            if word_list.__contains__(en_word):
+                lm_corpus.append(en_word)
+                del word_list[0]
+                en_word = ''
+
         elif ch == ' ':  # 空格 区分单词
-            pre_char = ch
             lm_corpus.append(en_word)
             en_word = ''
         else:
             pass
-    if en_word != '':
+
+    if word_list.__contains__(en_word):
         lm_corpus.append(en_word)
+        del word_list[0]
+        en_word = ''
 
     return ' '.join(lm_corpus)

@@ -18,15 +18,15 @@ def parse_json_text(line: str):
     # 处理 title,desc,answer
     title_list = json_data['title']
     if len(title_list) > 0:
-        result.extend(title_list)
+        result.append(title_list)
 
     desc_list = json_data['desc']
     if len(desc_list) > 0:
-        result.extend(desc_list)
+        result.append(desc_list)
 
     answer_list = json_data['answer']
     if len(answer_list) > 0:
-        result.extend(answer_list)
+        result.append(answer_list)
 
     return result
 

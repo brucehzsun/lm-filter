@@ -48,7 +48,7 @@ def filter_text(data: str, en_dict: dict):
 
 
 def process_baike_file(dir_path: str, file_name: str, en_dict: dict, corpus_name: str):
-    out_dir = os.path.join('data', corpus_name)
+    out_dir = os.path.join('/data/kenlm_data/data', corpus_name)
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 

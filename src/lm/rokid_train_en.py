@@ -6,7 +6,7 @@ import sys
 
 
 def process_corpus(file_path: str, corpus_name: str):
-    out_path = os.path.join("data", corpus_name + ".txt")
+    out_path = os.path.join("/data/kenlm_data/data", corpus_name)
     count = 0
     with open(file_path, 'r') as f, open(out_path, 'w') as writer:
         lines = f.readlines()
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     # parser.add_argument('--corpus', required=True, type=str, help='path of lm corpus')
     args = parser.parse_args()
 
-    corpus_path = "raw_data/train_rokidcs.text";
+    corpus_path = "raw_data/train_rokidcs.text"
     print(f"start rokid train corpus process,path={corpus_path},time={datetime.datetime.now()}")
 
     # path = "/Users/brucesun/asr-corpus/lm"

@@ -36,7 +36,7 @@ def read_wk_file(path: str, name: str):
 
 def process_dir(path: str, dir_name: str, corpus: str, en_dict: dict):
     count = 0
-    out_dir = os.path.join('data', corpus)
+    out_dir = os.path.join('/data/kenlm_data/data', corpus)
     if not os.path.exists(out_dir):
         os.makedirs(out_dir)
 

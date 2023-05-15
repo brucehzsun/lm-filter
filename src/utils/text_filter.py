@@ -160,9 +160,12 @@ def convert_to_lm_text(corpus: str):
     for ch in corpus:
         if is_chinese_char(ch):  # 中文 韩文 日文
             # 1.中文需要
+            if en_word.strip() != '':
+                lm_corpus.append(en_word.strip())
+                en_word = ''
+
             if ch.strip() != '':
                 lm_corpus.append(ch.strip())
-                en_word = ''
         if ch.lower() in 'abcdefghijklmnopqrstuvwxyz':
             # 英文字母 需要
             en_word += ch.strip().lower()

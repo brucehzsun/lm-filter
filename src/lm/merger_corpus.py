@@ -3,9 +3,9 @@ import datetime
 import time
 
 
-def merger_wik(file_paths: list):
+def merger_wik(file_paths: list, basic_dir: str):
     print(f"start merge multi file to one file...")
-    corpus_path = os.path.join('data', 'rokid_lm.txt')
+    corpus_path = os.path.join(basic_dir, 'rokid_lm.txt')
     total_size = 0
     with open(corpus_path, 'w') as writer:
         for file_path in file_paths:
@@ -28,14 +28,16 @@ def merger_wik(file_paths: list):
 if __name__ == '__main__':
     print(f"start merger corpus process,time={datetime.datetime.now()}")
 
+    root_path = '/data/kenlm_data/data'
     file_paths = []
-    file_paths.append(os.path.join('data', 'baike_qa', 'baike_qa_valid.json.txt'))
-    file_paths.append(os.path.join('data', 'baike_qa', 'baike_qa_train.json.txt'))
+    file_paths.append(os.path.join(root_path, 'baike_qa', 'baike_qa_valid.json.txt'))
+    file_paths.append(os.path.join(root_path, 'baike_qa', 'baike_qa_train.json.txt'))
 
-    file_paths.append(os.path.join('data', 'news_zh', 'news2016zh_train.json.txt'))
-    file_paths.append(os.path.join('data', 'news_zh', 'news2016zh_valid.json.txt'))
+    file_paths.append(os.path.join(root_path, 'news_zh', 'news2016zh_train.json.txt'))
+    file_paths.append(os.path.join(root_path, 'news_zh', 'news2016zh_valid.json.txt'))
 
-    file_paths.append(os.path.join('data', 'wiki_zh.txt'))
-    file_paths.append(os.path.join('data', 'rokid_train.txt'))
+    file_paths.append(os.path.join(root_path, 'wiki_zh.txt'))
+    file_paths.append(os.path.join(root_path, 'rokid_train.txt'))
+    file_paths.append(os.path.join(root_path, 'rokid_train_en.txt'))
 
-    merger_wik(file_paths)
+    merger_wik(file_paths, root_path)

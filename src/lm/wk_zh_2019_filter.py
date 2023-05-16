@@ -104,4 +104,4 @@ if __name__ == '__main__':
     process_corpus(path, corpus)
 
     # merger multi file to one file
-    merger_wik('data', corpus)
+    merger_wik('/data/kenlm_data/data', corpus)

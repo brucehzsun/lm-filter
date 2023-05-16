@@ -6,7 +6,7 @@ import sys
 
 
 def process_corpus(dir_path: str, corpus_name: str):
-    out_path = os.path.join("data", corpus_name + ".txt")
+    out_path = os.path.join("/data/kenlm_data/data", corpus_name + ".txt")
     path = os.path.join(dir_path, corpus_name, 'text.org')
     count = 0
     with open(path, 'r') as f, open(out_path, 'w') as writer:

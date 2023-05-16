@@ -97,7 +97,7 @@ def add_word_to_list(word: str, output: list, en_dict: dict):
     if enOnlyPattern.search(word):
         # 英文
         # if en_dict.get(word.lower()):
-        output.append(word)
+        output.append(word.lower())
     else:
         output.append(word)
 

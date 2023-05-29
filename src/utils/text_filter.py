@@ -155,6 +155,9 @@ def to_lm_str(data: str, en_dict: dict):
 
 
 def convert_to_lm_text(corpus: str):
+    if " ga " in corpus.lower():
+        return None
+
     en_word = ''
     lm_corpus = []
     for ch in corpus:

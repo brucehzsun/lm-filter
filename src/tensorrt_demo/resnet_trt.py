@@ -34,7 +34,8 @@ def load_egine():
     print(f"load model={engine_path}")
     with open(engine_path, "rb") as f:
         engine_data = f.read()
-        runtime = trt.Runtime(trt.Logger(trt.Logger.WARNING))
+        logger = trt.Logger(trt.Logger.WARNING)
+        runtime = trt.Runtime(logger)
         engine = runtime.deserialize_cuda_engine(engine_data)
     return engine
 

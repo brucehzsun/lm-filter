@@ -21,7 +21,7 @@ def process_corpus(file_path: str, corpus_name: str):
                 continue
             writer.write(lm_text + "\n")
             count = count + 1
-            if count % 10000 == 0:
+            if count % 1000000 == 0:
                 print(f"process {count}/{total_len}")
                 sys.stdout.flush()
         sys.stdout.flush()
@@ -33,10 +33,10 @@ if __name__ == '__main__':
     # parser.add_argument('--corpus', required=True, type=str, help='path of lm corpus')
     args = parser.parse_args()
 
-    corpus_path = "raw_data/train_rokidcs.text"
+    corpus_path = "/data/lm_corpus/text"
     print(f"start rokid train corpus process,path={corpus_path},time={datetime.datetime.now()}")
 
     # path = "/Users/brucesun/asr-corpus/lm"
     # path = "/home/bruce/asr/data"
-    corpus_name = 'rokid_train_en.txt'
+    corpus_name = 'rokid_train_jiqiang.txt'
     process_corpus(corpus_path, corpus_name)

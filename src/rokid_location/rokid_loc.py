@@ -3,6 +3,7 @@ import pycuda.driver as cuda
 import pycuda.autoinit
 import numpy as np
 import torch
+import time
 
 
 def normalize_keypoints(kpts, image_shape):
@@ -95,16 +96,12 @@ def infer(input_path, engine):
     # 将图片进行预处理
     input_desc0, input_desc1 = preprocess_input_data(input_path)
 
-    # 获取输入和输出张量
-    # input_descriptors0_tensor = engine.get_binding_tensor("descriptors0")
-    # input_descriptors1_tensor = engine.get_binding_tensor("descriptors1")
-    # output_scores_tensor = engine.get_binding_tensor("scores")
+    start_time = time.time()
 
     # 分配输入和输出显存
     # inputs, outputs, bindings = allocate_buffers(engine)
     inputs = []
     outputs = []
-    output_datas = []
     bindings = []
 
     for binding in engine:
@@ -123,23 +120,30 @@ def infer(input_path, engine):
             output_buffer = cuda.pagelocked_empty(size, dtype)
             output_memory = cuda.mem_alloc(output_buffer.nbytes)
             outputs.append(output_memory)
-            output_datas.append(output_memory)
             bindings.append(int(output_memory))
     # return inputs, outputs, bindings
 
     stream = cuda.Stream()
     # 将输入数据拷贝到显存中
     # cuda.memcpy_htod(inputs[0], input_data)
-    print(f"input_desc0={input_desc0.shape},type={type(input_desc0)}")
+    input_desc0 = input_desc0.cpu().numpy()
+    input_desc1 = input_desc1.cpu().numpy()
+    # memcpy_htod_async, d_input = <# class 'pycuda._driver.DeviceAllocation'>, batch= < class 'numpy.ndarray' >
+
     cuda.memcpy_htod_async(inputs[0], input_desc0, stream)
     cuda.memcpy_htod_async(inputs[1], input_desc1, stream)
-    # # Run inference
-    # context.execute_async_v2(bindings=bindings, stream_handle=stream.handle)
-    # # Transfer prediction output from the GPU.
-    # cuda.memcpy_dtoh_async(output_datas[0], outputs[0], stream)
-    # # Synchronize the stream
-    # stream.synchronize()
-    # print(f"output_data={output_data}")
+    start_time_core = time.time()
+    # Run inference
+    context.execute_async_v2(bindings=bindings, stream_handle=stream.handle)
+    # Transfer prediction output from the GPU.
+    # 8x1026x1031
+    scores = np.empty(8 * 1026 * 1031, dtype=np.float32)  # Need to set both input and output precisions to FP16 to fully enable FP16
+    print(f"ouput,output_datas[0]={type(scores)},d_output={type(outputs[0])}")
+    # ouput,output_datas[0]=<class 'pycuda._driver.DeviceAllocation'>,d_output=<class 'pycuda._driver.DeviceAllocation'>
+    cuda.memcpy_dtoh_async(scores, outputs[0], stream)
+    # Synchronize the stream
+    stream.synchronize()
+    print(f"output_type={type(scores)},shape={scores.shape},core_time+{(time.time() - start_time) * 1000}")
 
     # # 进行推理
     # context.execute_v2(bindings=bindings)
@@ -150,8 +154,8 @@ def infer(input_path, engine):
     #
     # # 对输出结果进行后处理
     # results = postprocess_output(output_data)
-    print("=========infrence finish===========")
-    # return results
+    print(f"inference_success,time={(time.time() - start_time) * 1000}")
+    return scores
 
 
 if __name__ == '__main__':
@@ -164,5 +168,5 @@ if __name__ == '__main__':
 
     # 对单张图片进行推理
     input_data = 'data.pt'
-    infer(input_data, engine)
+    scores = infer(input_data, engine)
     print(f"==========finish===========")

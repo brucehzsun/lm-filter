@@ -99,29 +99,7 @@ def infer(input_path, engine):
     start_time = time.time()
 
     # 分配输入和输出显存
-    # inputs, outputs, bindings = allocate_buffers(engine)
-    inputs = []
-    outputs = []
-    bindings = []
-
-    for binding in engine:
-        binding_idx = engine.get_binding_index(binding)
-        shape = context.get_binding_shape(binding_idx)
-        size = trt.volume(shape)
-        dtype = engine.get_binding_dtype(binding)
-        dtype = trt.nptype(dtype)
-        print(f"{binding},size={size},dtype={dtype},shape={shape},bytes={dtype.itemsize}")
-        if engine.binding_is_input(binding):
-            input_buffer = cuda.pagelocked_empty(size, dtype)
-            input_memory = cuda.mem_alloc(input_buffer.nbytes)
-            inputs.append(input_memory)
-            bindings.append(int(input_memory))
-        else:
-            output_buffer = cuda.pagelocked_empty(size, dtype)
-            output_memory = cuda.mem_alloc(output_buffer.nbytes)
-            outputs.append(output_memory)
-            bindings.append(int(output_memory))
-    # return inputs, outputs, bindings
+    inputs, outputs, bindings = allocate_buffers(engine)
 
     stream = cuda.Stream()
     # 将输入数据拷贝到显存中
@@ -144,16 +122,6 @@ def infer(input_path, engine):
     # Synchronize the stream
     stream.synchronize()
     print(f"output_type={type(scores)},shape={scores.shape},core_time+{(time.time() - start_time) * 1000}")
-
-    # # 进行推理
-    # context.execute_v2(bindings=bindings)
-    #
-    # # 将输出数据从显存中拷贝出来
-    # output_data = np.zeros(trt.volume(output_tensor.shape), dtype=np.float32)
-    # cuda.memcpy_dtoh(output_data, outputs[0])
-    #
-    # # 对输出结果进行后处理
-    # results = postprocess_output(output_data)
     print(f"inference_success,time={(time.time() - start_time) * 1000}")
     return scores
 
@@ -168,5 +136,6 @@ if __name__ == '__main__':
 
     # 对单张图片进行推理
     input_data = 'data.pt'
-    scores = infer(input_data, engine)
-    print(f"==========finish===========")
+    for i in range(2):
+        scores = infer(input_data, engine)
+        # print("==========finish===========")
